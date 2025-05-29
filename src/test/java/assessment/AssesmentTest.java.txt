@@ -1,0 +1,53 @@
+package assesment;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.Assert;
+import org.testng.annotations.*;
+
+import java.time.Duration;
+import java.util.*;
+
+public class AssesmentTest {
+
+    WebDriver driver;
+    LoginPage loginPage;
+    DashboardPage dashboardPage;
+    PIMPage pimPage;
+    EmployeeListPage employeeListPage;
+
+    List<String> addedEmployeeFullNames = new ArrayList<>();
+    List<String> addedEmployeeIDs = new ArrayList<>();
+
+    @BeforeMethod
+    public void setup() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        driver = new ChromeDriver(options);
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        loginPage = new LoginPage(driver);
+        dashboardPage = new DashboardPage(driver);
+        pimPage = new PIMPage(driver);
+        employeeListPage = new EmployeeListPage(driver);
+    }
+
+    @Test
+    public void testOrangeHRMWorkflow() throws InterruptedException {
+        loginPage.login("Admin", "admin123");
+        Assert.assertTrue(dashboardPage.isDashboardDisplayed(), "Login failed");
+        dashboardPage.navigateToPIMModule();
+
+        String[][] employees = {
+                {"Alice", "M", "Smith", "EMP001"},
+                {"Bob", "", "Johnson", "EMP002"},
+                {"Charlie", "A", "Brown", "EMP003"},
+                {"Diana", "L", "Miller", "EMP004"}
+        };
+
+        for (String[] emp : employees) {
+            pimPage.clickAddEmployee();
+            pimPage.addEmployee(emp[

@@ -1,0 +1,37 @@
+package assesment;
+
+import org.openqa.selenium.*;
+
+public class LoginPage extends BaseTest {
+    private By usernameField = By.name("username");
+    private By passwordField = By.name("password");
+    private By loginButton = By.cssSelector("button[type='submit']");
+
+    public LoginPage(WebDriver driver) {
+        super(driver);
+        goToPage();
+    }
+
+    public void login(String username, String password) {
+        typeInto(usernameField, username);
+        typeInto(passwordField, password);
+        click(loginButton);
+    }
+
+    public boolean isLoginSuccessful() {
+        return getCurrentUrl().contains("dashboard");
+    }
+
+    public String getErrorMessage() {
+        try {
+            By errorMessageLocator = By.cssSelector(".oxd-alert-content-text");
+            return findElement(errorMessageLocator).getText();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public By getUsernameLocator() {
+        return usernameField;
+    }
+}

@@ -1,0 +1,44 @@
+package assesment;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+
+public class PIMPage extends BaseTest {
+    private By addEmployeeButton = By.linkText("Add Employee");
+    private By firstNameField = By.name("firstName");
+    private By middleNameField = By.name("middleName");
+    private By lastNameField = By.name("lastName");
+    private By saveButton = By.cssSelector("button[type='submit']");
+    private By employeeIdField = By.xpath("//label[text()='Employee Id']/following-sibling::input");
+    private By successMessage = By.xpath("//p[contains(@class, 'oxd-text--toast-message') and text()='Successfully Saved']");
+
+    public PIMPage(WebDriver driver) {
+        super(driver);
+    }
+
+    public void clickAddEmployee() {
+        click(addEmployeeButton);
+        wait.until(ExpectedConditions.presenceOfElementLocated(firstNameField));
+    }
+
+    public void addEmployee(String firstName, String middleName, String lastName, String employeeId) {
+        typeInto(firstNameField, firstName);
+        if (middleName != null && !middleName.isEmpty()) {
+            typeInto(middleNameField, middleName);
+        }
+        typeInto(lastNameField, lastName);
+
+        WebElement empIdElement = findElement(employeeIdField);
+        empIdElement.clear();
+        empIdElement.sendKeys(employeeId);
+
+        click(saveButton);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(successMessage));
+        System.out.println("Successfully added employee: " + firstName + " " + lastName);
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(successMessage));
+    }
+
+    public By getAddEmployeeButton() {
+        return addEmployeeButton;
+    }
+}

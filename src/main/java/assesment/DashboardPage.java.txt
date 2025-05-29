@@ -1,0 +1,31 @@
+package assesment;
+
+import org.openqa.selenium.*;
+
+public class DashboardPage extends BaseTest {
+    private By pimModule = By.xpath("//span[text()='PIM']");
+    private By userDropdown = By.cssSelector(".oxd-userdropdown-img");
+    private By logoutLink = By.linkText("Logout");
+    private By dashboardHeader = By.xpath("//h6[text()='Dashboard']");
+
+    public DashboardPage(WebDriver driver) {
+        super(driver);
+    }
+
+    public boolean isDashboardDisplayed() {
+        return findElement(dashboardHeader).isDisplayed();
+    }
+
+    public void navigateToPIMModule() {
+        click(pimModule);
+    }
+
+    public void logout() {
+        click(userDropdown);
+        click(logoutLink);
+    }
+
+    public By getDashboardHeader() {
+        return dashboardHeader;
+    }
+}
